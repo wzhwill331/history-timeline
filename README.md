@@ -1,16 +1,114 @@
-# React + Vite
+# 📜 历史时光轴
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 献给敬爱的历史黄洁老师
 
-Currently, two official plugins are available:
+一个帮助高中历史教学与探索的 Web 应用，收录从夏朝到新中国成立的 **105 个重要历史事件**，配有真实历史图片、教学笔记、重点标记等功能。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ 功能特色
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| 功能 | 说明 |
+|------|------|
+| 🕐 **纵向时间轴** | 按朝代分组，滚动渐入动画 |
+| 📊 **横向时间轴** | 适合投屏教学，左右滑动浏览 |
+| 📚 **专题模式** | 政治制度、经济发展、思想文化、民族关系、对外关系 |
+| ✏️ **编辑模式** | 添加自定义事件，编辑已有事件 |
+| 📷 **历史图片** | 35 个关键事件配有真实历史图片 |
+| 📝 **教学笔记** | 每个事件可添加课堂讲解要点 |
+| ⭐ **重点标记** | 标记高考重点，一键筛选 |
+| 🎲 **随机探索** | 随机展示历史事件，增加趣味性 |
+| 🎓 **课堂模式** | 大字体，适合投屏 |
+| 📤 **导入导出** | 数据可导出为 JSON 备份 |
+| ❓ **新手教程** | 首次使用自动引导 |
 
-## Expanding the ESLint configuration
+## 📅 历史覆盖
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| 朝代 | 时间范围 | 事件数 |
+|------|----------|--------|
+| 先秦 | 前2070年 - 前221年 | 10 |
+| 秦汉 | 前221年 - 220年 | 11 |
+| 三国两晋南北朝 | 220年 - 589年 | 9 |
+| 隋唐 | 581年 - 907年 | 12 |
+| 五代十国宋元 | 907年 - 1368年 | 14 |
+| 明清 | 1368年 - 1840年 | 18 |
+| 近代史 | 1839年 - 1949年 | 31 |
+
+## 🚀 使用方式
+
+### 方式一：网页版（推荐）
+
+直接访问在线版本：
+
+🔗 **https://wzhwill331.github.io/history-timeline/**
+
+### 方式二：单文件 HTML
+
+下载 `历史时光轴.html`，双击即可在浏览器中打开，无需安装。
+
+### 方式三：本地 exe 版
+
+下载 `历史时光轴.exe`，放入任意文件夹，双击运行。
+
+- 数据自动保存在 exe 同目录的 `history-data.json`
+- 支持 U 盘便携使用
+
+## 📁 项目结构
+
+```
+history-timeline/
+├── src/
+│   ├── App.jsx                 # 主应用
+│   ├── components/
+│   │   ├── Timeline.jsx        # 纵向时间轴
+│   │   ├── HorizontalTimeline.jsx  # 横向时间轴
+│   │   ├── TopicMode.jsx       # 专题模式
+│   │   ├── EventModal.jsx      # 事件详情弹窗
+│   │   ├── EditPanel.jsx       # 添加事件面板
+│   │   ├── EditEventPanel.jsx  # 编辑事件面板
+│   │   ├── Tutorial.jsx        # 新手教程
+│   │   └── ...
+│   ├── data/
+│   │   └── historyData.json    # 历史事件数据
+│   └── hooks/
+│       └── useLocalStorage.js  # 数据持久化
+├── public/
+│   └── images/                 # 历史事件图片
+├── electron/                   # Electron 桌面版配置
+├── 历史时光轴.html              # 单文件网页版
+└── 历史时光轴.exe               # 便携版可执行文件
+```
+
+## 🛠️ 开发
+
+```bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+
+# 构建网页版
+npm run build
+
+# 构建 exe 版（需要 Electron）
+npm run electron:build
+```
+
+## 📦 分支说明
+
+| 分支 | 用途 |
+|------|------|
+| `main` | Electron 本地 exe 版 |
+| `web` | GitHub Pages 网页版 |
+| `html` | 单文件 HTML 版 |
+
+## 🎓 致谢
+
+献给敬爱的历史黄洁老师，感谢您对历史教学的热爱与付出。
+
+> 以史为鉴，可以知兴替。
+
+---
+
+📅 2026 年 5 月 · 自控 2504 班 · 危展宏
