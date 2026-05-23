@@ -8,6 +8,7 @@ const dynastyColors = {
   '隋唐': { dot: 'bg-yellow-500', line: 'bg-yellow-300', card: 'border-yellow-400 hover:border-yellow-500', tag: 'bg-yellow-100 text-yellow-800', accent: 'text-yellow-700' },
   '五代十国宋元': { dot: 'bg-cyan-600', line: 'bg-cyan-300', card: 'border-cyan-400 hover:border-cyan-600', tag: 'bg-cyan-100 text-cyan-800', accent: 'text-cyan-700' },
   '明清': { dot: 'bg-blue-700', line: 'bg-blue-300', card: 'border-blue-400 hover:border-blue-700', tag: 'bg-blue-100 text-blue-800', accent: 'text-blue-700' },
+  '近代史': { dot: 'bg-purple-600', line: 'bg-purple-300', card: 'border-purple-400 hover:border-purple-600', tag: 'bg-purple-100 text-purple-800', accent: 'text-purple-700' },
 }
 
 const categoryEmojis = {
@@ -98,7 +99,7 @@ export default function Timeline({ events, onEventClick, dynastyRefs }) {
     return acc
   }, {})
 
-  const dynastyOrder = ['先秦', '秦汉', '三国两晋南北朝', '隋唐', '五代十国宋元', '明清']
+  const dynastyOrder = ['先秦', '秦汉', '三国两晋南北朝', '隋唐', '五代十国宋元', '明清', '近代史']
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">

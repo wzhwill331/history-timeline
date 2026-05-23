@@ -7,6 +7,7 @@ const dynastyColors = {
   '隋唐': { bg: 'bg-yellow-600', text: 'text-yellow-100', hover: 'hover:bg-yellow-500', ring: 'ring-yellow-400' },
   '五代十国宋元': { bg: 'bg-cyan-700', text: 'text-cyan-100', hover: 'hover:bg-cyan-600', ring: 'ring-cyan-500' },
   '明清': { bg: 'bg-blue-800', text: 'text-blue-100', hover: 'hover:bg-blue-700', ring: 'ring-blue-500' },
+  '近代史': { bg: 'bg-purple-700', text: 'text-purple-100', hover: 'hover:bg-purple-600', ring: 'ring-purple-500' },
 }
 
 export default function DynastyNav({ dynasties, activeDynasty, onDynastyClick }) {

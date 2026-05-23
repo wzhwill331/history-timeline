@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const dynastyColors = {
@@ -7,6 +8,7 @@ const dynastyColors = {
   '隋唐': 'from-yellow-500 to-yellow-700',
   '五代十国宋元': 'from-cyan-600 to-cyan-800',
   '明清': 'from-blue-700 to-blue-900',
+  '近代史': 'from-purple-600 to-purple-800',
 }
 
 const categoryEmojis = {
@@ -17,11 +19,19 @@ const categoryEmojis = {
   '经济': '💰',
 }
 
-export default function EventModal({ event, onClose }) {
+export default function EventModal({ event, onClose, isBookmarked, onToggleBookmark, note, onSaveNote }) {
+  const [editingNote, setEditingNote] = useState(false)
+  const [noteText, setNoteText] = useState(note || '')
+
   if (!event) return null
 
   const gradient = dynastyColors[event.dynasty] || 'from-gray-600 to-gray-800'
   const yearDisplay = event.year < 0 ? `公元前${Math.abs(event.year)}年` : `公元${event.year}年`
+
+  const handleSaveNote = () => {
+    onSaveNote(noteText)
+    setEditingNote(false)
+  }
 
   return (
     <AnimatePresence>
@@ -43,19 +53,30 @@ export default function EventModal({ event, onClose }) {
           {/* 顶部彩色条 */}
           <div className={`bg-gradient-to-r ${gradient} p-6 rounded-t-2xl`}>
             <div className="flex justify-between items-start">
-              <div>
-                <span className="inline-block px-2 py-0.5 bg-white/20 rounded-full text-white/90 text-xs mb-2">
-                  {categoryEmojis[event.category]} {event.category}
-                </span>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="inline-block px-2 py-0.5 bg-white/20 rounded-full text-white/90 text-xs">
+                    {categoryEmojis[event.category]} {event.category}
+                  </span>
+                  {event.isCustom && (
+                    <span className="inline-block px-2 py-0.5 bg-white/30 rounded-full text-white text-xs">
+                      ✏️ 自定义
+                    </span>
+                  )}
+                </div>
                 <h2 className="text-2xl font-bold text-white">{event.title}</h2>
                 <p className="text-white/80 text-sm mt-1">{yearDisplay} · {event.dynasty}</p>
               </div>
-              <button
-                onClick={onClose}
-                className="text-white/70 hover:text-white text-2xl leading-none p-1"
-              >
-                ✕
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => onToggleBookmark()}
+                  className={`text-2xl transition-transform hover:scale-110 ${isBookmarked ? '' : 'opacity-50 grayscale'}`}
+                  title={isBookmarked ? '取消重点标记' : '标记为重点'}
+                >
+                  ⭐
+                </button>
+                <button onClick={onClose} className="text-white/70 hover:text-white text-2xl leading-none p-1">✕</button>
+              </div>
             </div>
           </div>
 
@@ -73,10 +94,7 @@ export default function EventModal({ event, onClose }) {
                 <h3 className="text-amber-800 font-semibold text-sm mb-2">👤 相关人物</h3>
                 <div className="flex flex-wrap gap-2">
                   {event.figures.map((figure) => (
-                    <span
-                      key={figure}
-                      className="px-3 py-1 bg-amber-50 text-amber-800 rounded-full text-sm border border-amber-200"
-                    >
+                    <span key={figure} className="px-3 py-1 bg-amber-50 text-amber-800 rounded-full text-sm border border-amber-200">
                       {figure}
                     </span>
                   ))}
@@ -85,11 +103,61 @@ export default function EventModal({ event, onClose }) {
             )}
 
             {/* 历史意义 */}
+            {event.significance && (
+              <div>
+                <h3 className="text-amber-800 font-semibold text-sm mb-2">💡 历史意义</h3>
+                <p className="text-gray-700 leading-relaxed bg-amber-50/50 p-4 rounded-xl border border-amber-100">
+                  {event.significance}
+                </p>
+              </div>
+            )}
+
+            {/* 教学笔记 */}
             <div>
-              <h3 className="text-amber-800 font-semibold text-sm mb-2">💡 历史意义</h3>
-              <p className="text-gray-700 leading-relaxed bg-amber-50/50 p-4 rounded-xl border border-amber-100">
-                {event.significance}
-              </p>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-amber-800 font-semibold text-sm">📝 教学笔记</h3>
+                {!editingNote && (
+                  <button
+                    onClick={() => setEditingNote(true)}
+                    className="text-xs text-amber-600 hover:text-amber-800"
+                  >
+                    {note ? '编辑' : '+ 添加笔记'}
+                  </button>
+                )}
+              </div>
+
+              {editingNote ? (
+                <div className="space-y-2">
+                  <textarea
+                    value={noteText}
+                    onChange={(e) => setNoteText(e.target.value)}
+                    placeholder="写下课堂讲解要点、学生易错点、补充材料..."
+                    rows={4}
+                    className="w-full px-3 py-2 rounded-lg border border-amber-300 focus:ring-2 focus:ring-amber-400 focus:border-transparent resize-none text-sm"
+                    autoFocus
+                  />
+                  <div className="flex gap-2 justify-end">
+                    <button
+                      onClick={() => { setEditingNote(false); setNoteText(note || '') }}
+                      className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800"
+                    >
+                      取消
+                    </button>
+                    <button
+                      onClick={handleSaveNote}
+                      className="px-3 py-1.5 text-sm bg-amber-600 text-white rounded-lg hover:bg-amber-700"
+                    >
+                      保存
+                    </button>
+                  </div>
+                </div>
+              ) : note ? (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                  <p className="text-gray-700 text-sm whitespace-pre-wrap">{note}</p>
+                </div>
+              ) : (
+                <p className="text-gray-400 text-sm italic">还没有添加教学笔记</p>
+              )}
             </div>
           </div>
 

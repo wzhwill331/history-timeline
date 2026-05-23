@@ -8,6 +8,7 @@ const dynastyColors = {
   '隋唐': 'border-yellow-500 bg-yellow-50',
   '五代十国宋元': 'border-cyan-600 bg-cyan-50',
   '明清': 'border-blue-700 bg-blue-50',
+  '近代史': 'border-purple-600 bg-purple-50',
 }
 
 const categoryEmojis = {
