@@ -11,9 +11,22 @@ import EditPanel from './components/EditPanel'
 import EditEventPanel from './components/EditEventPanel'
 import Tutorial from './components/Tutorial'
 import TopicMode from './components/TopicMode'
-import { useLocalStorage } from './hooks/useLocalStorage'
 
 const dynastyOrder = ['先秦', '秦汉', '三国两晋南北朝', '隋唐', '五代十国宋元', '明清', '近代史']
+
+// 网页版使用 localStorage
+function useWebStorage(key, initialValue) {
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      const item = localStorage.getItem(key)
+      return item ? JSON.parse(item) : initialValue
+    } catch { return initialValue }
+  })
+  useEffect(() => {
+    try { localStorage.setItem(key, JSON.stringify(storedValue)) } catch {}
+  }, [key, storedValue])
+  return [storedValue, setStoredValue]
+}
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -33,10 +46,10 @@ export default function App() {
   const dynastyRefs = useRef({})
 
   // 持久化数据
-  const [customEvents, setCustomEvents] = useLocalStorage('history-custom-events', [])
-  const [bookmarks, setBookmarks] = useLocalStorage('history-bookmarks', [])
-  const [notes, setNotes] = useLocalStorage('history-notes', {})
-  const [eventOverrides, setEventOverrides] = useLocalStorage('history-event-overrides', {})
+  const [customEvents, setCustomEvents] = useWebStorage('history-custom-events', [])
+  const [bookmarks, setBookmarks] = useWebStorage('history-bookmarks', [])
+  const [notes, setNotes] = useWebStorage('history-notes', {})
+  const [eventOverrides, setEventOverrides] = useWebStorage('history-event-overrides', {})
   const [editingEvent, setEditingEvent] = useState(null)
 
   // 合并：内置事件 + 覆盖修改 + 自定义事件
