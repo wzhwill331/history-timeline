@@ -327,7 +327,7 @@ export default function App() {
 
       {/* 底部 */}
       <footer className="text-center py-8 text-amber-600/60 text-sm border-t border-amber-200">
-        <p>📜 历史时光轴 · 献给敬爱的历史黄老师</p>
+        <p>📜 历史时光轴 · 献给敬爱的历史黄洁老师</p>
         <p className="mt-1">以史为鉴，可以知兴替</p>
       </footer>
 
