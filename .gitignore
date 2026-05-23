@@ -1,0 +1,5 @@
+release/
+*.exe
+node_modules/
+dist/
+history-data.json
