@@ -1,23 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-const dynastyColors = {
-  '先秦': 'border-amber-600 bg-amber-50',
-  '秦汉': 'border-red-600 bg-red-50',
-  '三国两晋南北朝': 'border-emerald-600 bg-emerald-50',
-  '隋唐': 'border-yellow-500 bg-yellow-50',
-  '五代十国宋元': 'border-cyan-600 bg-cyan-50',
-  '明清': 'border-blue-700 bg-blue-50',
-  '近代史': 'border-purple-600 bg-purple-50',
-}
-
-const categoryEmojis = {
-  '战争': '⚔️',
-  '文化': '📜',
-  '科技': '🔬',
-  '政治': '🏛️',
-  '经济': '💰',
-}
+import { getDynastyColors, categoryEmojis, formatYearFull } from '../constants'
 
 export default function TodayInHistory({ events, onEventClick }) {
   const [randomEvent, setRandomEvent] = useState(null)
@@ -35,8 +18,9 @@ export default function TodayInHistory({ events, onEventClick }) {
 
   if (!randomEvent) return null
 
-  const yearDisplay = randomEvent.year < 0 ? `公元前${Math.abs(randomEvent.year)}年` : `公元${randomEvent.year}年`
-  const borderClass = dynastyColors[randomEvent.dynasty] || 'border-gray-600 bg-gray-50'
+  const yearDisplay = formatYearFull(randomEvent.year)
+  const dc = getDynastyColors(randomEvent.dynasty)
+  const borderClass = `${dc.borderLeft} ${dc.solidBg}`
 
   return (
     <div className="fixed bottom-6 right-6 z-30 max-w-sm">

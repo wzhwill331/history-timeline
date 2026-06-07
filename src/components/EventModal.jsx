@@ -1,19 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-const dynastyColors = {
-  '先秦': 'from-amber-600 to-amber-800',
-  '秦汉': 'from-red-600 to-red-800',
-  '三国两晋南北朝': 'from-emerald-600 to-emerald-800',
-  '隋唐': 'from-yellow-500 to-yellow-700',
-  '五代十国宋元': 'from-cyan-600 to-cyan-800',
-  '明清': 'from-blue-700 to-blue-900',
-  '近代史': 'from-purple-600 to-purple-800',
-}
-
-const categoryEmojis = {
-  '战争': '⚔️', '文化': '📜', '科技': '🔬', '政治': '🏛️', '经济': '💰',
-}
+import { getDynastyColors, categoryEmojis, formatYearFull } from '../constants'
 
 export default function EventModal({ event, onClose, isBookmarked, onToggleBookmark, note, onSaveNote, editMode, onEdit }) {
   const [editingNote, setEditingNote] = useState(false)
@@ -23,8 +10,8 @@ export default function EventModal({ event, onClose, isBookmarked, onToggleBookm
 
   if (!event) return null
 
-  const gradient = dynastyColors[event.dynasty] || 'from-gray-600 to-gray-800'
-  const yearDisplay = event.year < 0 ? `公元前${Math.abs(event.year)}年` : `公元${event.year}年`
+  const gradient = getDynastyColors(event.dynasty).gradient
+  const yearDisplay = formatYearFull(event.year)
 
   const handleSaveNote = () => {
     onSaveNote(noteText)
@@ -45,7 +32,7 @@ export default function EventModal({ event, onClose, isBookmarked, onToggleBookm
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto"
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
         >
           {/* 顶部彩色条 */}
@@ -104,16 +91,16 @@ export default function EventModal({ event, onClose, isBookmarked, onToggleBookm
           {/* 内容 */}
           <div className="p-6 space-y-5">
             <div>
-              <h3 className="text-amber-800 font-semibold text-sm mb-2">📖 事件简介</h3>
-              <p className="text-gray-700 leading-relaxed">{event.description}</p>
+              <h3 className="text-amber-800 dark:text-amber-300 font-semibold text-sm mb-2">📖 事件简介</h3>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{event.description}</p>
             </div>
 
             {event.figures && event.figures.length > 0 && (
               <div>
-                <h3 className="text-amber-800 font-semibold text-sm mb-2">👤 相关人物</h3>
+                <h3 className="text-amber-800 dark:text-amber-300 font-semibold text-sm mb-2">👤 相关人物</h3>
                 <div className="flex flex-wrap gap-2">
                   {event.figures.map((figure) => (
-                    <span key={figure} className="px-3 py-1 bg-amber-50 text-amber-800 rounded-full text-sm border border-amber-200">
+                    <span key={figure} className="px-3 py-1 bg-amber-50 dark:bg-gray-700 text-amber-800 dark:text-amber-300 rounded-full text-sm border border-amber-200 dark:border-gray-600">
                       {figure}
                     </span>
                   ))}
@@ -123,8 +110,8 @@ export default function EventModal({ event, onClose, isBookmarked, onToggleBookm
 
             {event.significance && (
               <div>
-                <h3 className="text-amber-800 font-semibold text-sm mb-2">💡 历史意义</h3>
-                <p className="text-gray-700 leading-relaxed bg-amber-50/50 p-4 rounded-xl border border-amber-100">
+                <h3 className="text-amber-800 dark:text-amber-300 font-semibold text-sm mb-2">💡 历史意义</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed bg-amber-50/50 dark:bg-gray-700/50 p-4 rounded-xl border border-amber-100 dark:border-gray-600">
                   {event.significance}
                 </p>
               </div>
@@ -133,7 +120,7 @@ export default function EventModal({ event, onClose, isBookmarked, onToggleBookm
             {/* 教学笔记 */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-amber-800 font-semibold text-sm">📝 教学笔记</h3>
+                <h3 className="text-amber-800 dark:text-amber-300 font-semibold text-sm">📝 教学笔记</h3>
                 {!editingNote && (
                   <button onClick={() => setEditingNote(true)} className="text-xs text-amber-600 hover:text-amber-800">
                     {note ? '编辑' : '+ 添加笔记'}
@@ -148,7 +135,7 @@ export default function EventModal({ event, onClose, isBookmarked, onToggleBookm
                     onChange={(e) => setNoteText(e.target.value)}
                     placeholder="写下课堂讲解要点、学生易错点..."
                     rows={4}
-                    className="w-full px-3 py-2 rounded-lg border border-amber-300 focus:ring-2 focus:ring-amber-400 focus:border-transparent resize-none text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-amber-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-amber-400 focus:border-transparent resize-none text-sm"
                     autoFocus
                   />
                   <div className="flex gap-2 justify-end">
@@ -157,8 +144,8 @@ export default function EventModal({ event, onClose, isBookmarked, onToggleBookm
                   </div>
                 </div>
               ) : note ? (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-                  <p className="text-gray-700 text-sm whitespace-pre-wrap">{note}</p>
+                <div className="bg-yellow-50 dark:bg-gray-700 border border-yellow-200 dark:border-gray-600 rounded-xl p-4">
+                  <p className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap">{note}</p>
                 </div>
               ) : (
                 <p className="text-gray-400 text-sm italic">还没有添加教学笔记</p>

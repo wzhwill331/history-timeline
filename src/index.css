@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* 暗色模式：基于 class 切换 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 暗色模式全局背景 */
+.dark {
+  color-scheme: dark;
+}
+
 /* 横向滚动条美化 */
 .scrollbar-thin::-webkit-scrollbar {
   height: 8px;

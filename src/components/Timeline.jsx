@@ -1,30 +1,9 @@
 import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-
-const dynastyColors = {
-  '先秦': { dot: 'bg-amber-600', line: 'bg-amber-300', card: 'border-amber-400 hover:border-amber-600', tag: 'bg-amber-100 text-amber-800', accent: 'text-amber-700' },
-  '秦汉': { dot: 'bg-red-600', line: 'bg-red-300', card: 'border-red-400 hover:border-red-600', tag: 'bg-red-100 text-red-800', accent: 'text-red-700' },
-  '三国两晋南北朝': { dot: 'bg-emerald-600', line: 'bg-emerald-300', card: 'border-emerald-400 hover:border-emerald-600', tag: 'bg-emerald-100 text-emerald-800', accent: 'text-emerald-700' },
-  '隋唐': { dot: 'bg-yellow-500', line: 'bg-yellow-300', card: 'border-yellow-400 hover:border-yellow-500', tag: 'bg-yellow-100 text-yellow-800', accent: 'text-yellow-700' },
-  '五代十国宋元': { dot: 'bg-cyan-600', line: 'bg-cyan-300', card: 'border-cyan-400 hover:border-cyan-600', tag: 'bg-cyan-100 text-cyan-800', accent: 'text-cyan-700' },
-  '明清': { dot: 'bg-blue-700', line: 'bg-blue-300', card: 'border-blue-400 hover:border-blue-700', tag: 'bg-blue-100 text-blue-800', accent: 'text-blue-700' },
-  '近代史': { dot: 'bg-purple-600', line: 'bg-purple-300', card: 'border-purple-400 hover:border-purple-600', tag: 'bg-purple-100 text-purple-800', accent: 'text-purple-700' },
-}
-
-const categoryEmojis = {
-  '战争': '⚔️',
-  '文化': '📜',
-  '科技': '🔬',
-  '政治': '🏛️',
-  '经济': '💰',
-}
-
-function formatYear(year) {
-  return year < 0 ? `公元前${Math.abs(year)}` : `${year}`
-}
+import { dynastyOrder, getDynastyColors, categoryEmojis, formatYear } from '../constants'
 
 function DynastyHeader({ dynasty }) {
-  const colors = dynastyColors[dynasty] || dynastyColors['先秦']
+  const colors = getDynastyColors(dynasty)
   return (
     <div className="flex items-center gap-3 py-4" id={`dynasty-${dynasty}`}>
       <div className={`w-3 h-3 rounded-full ${colors.dot}`} />
@@ -35,7 +14,7 @@ function DynastyHeader({ dynasty }) {
 }
 
 function EventCard({ event, index, onClick }) {
-  const colors = dynastyColors[event.dynasty] || dynastyColors['先秦']
+  const colors = getDynastyColors(event.dynasty)
   const isLeft = index % 2 === 0
 
   return (
@@ -57,7 +36,7 @@ function EventCard({ event, index, onClick }) {
         whileHover={{ scale: 1.02, y: -2 }}
         onClick={() => onClick(event)}
         className={`
-          flex-1 p-4 bg-white rounded-xl border-l-4 shadow-sm cursor-pointer
+          flex-1 p-4 bg-white dark:bg-gray-800 rounded-xl border-l-4 shadow-sm cursor-pointer
           hover:shadow-md transition-all duration-200 mb-4
           ${colors.card}
         `}
@@ -68,8 +47,8 @@ function EventCard({ event, index, onClick }) {
               <span className={`text-xs font-mono ${colors.accent}`}>{formatYear(event.year)}</span>
               <span className={`text-xs px-2 py-0.5 rounded-full ${colors.tag}`}>{event.dynasty}</span>
             </div>
-            <h3 className="font-bold text-gray-800 text-lg">{event.title}</h3>
-            <p className="text-gray-600 text-sm mt-1 line-clamp-2">{event.description}</p>
+            <h3 className="font-bold text-gray-800 dark:text-gray-100 text-lg">{event.title}</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm mt-1 line-clamp-2">{event.description}</p>
           </div>
           <span className="text-lg flex-shrink-0">{categoryEmojis[event.category]}</span>
         </div>
@@ -77,7 +56,7 @@ function EventCard({ event, index, onClick }) {
         {event.figures && event.figures.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-3">
             {event.figures.slice(0, 3).map((figure) => (
-              <span key={figure} className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
+              <span key={figure} className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">
                 {figure}
               </span>
             ))}
@@ -98,8 +77,6 @@ export default function Timeline({ events, onEventClick, dynastyRefs }) {
     acc[event.dynasty].push(event)
     return acc
   }, {})
-
-  const dynastyOrder = ['先秦', '秦汉', '三国两晋南北朝', '隋唐', '五代十国宋元', '明清', '近代史']
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">

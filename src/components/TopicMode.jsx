@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { getDynastyColors, categoryEmojis, formatYearShort } from '../constants'
 
 const topics = [
   {
@@ -59,24 +60,6 @@ function matchTopic(event, topic) {
   // Check by keywords
   const text = event.title + event.description + event.significance
   return topic.keywords.some(kw => text.includes(kw))
-}
-
-const dynastyColors = {
-  '先秦': 'bg-amber-600',
-  '秦汉': 'bg-red-600',
-  '三国两晋南北朝': 'bg-emerald-600',
-  '隋唐': 'bg-yellow-500',
-  '五代十国宋元': 'bg-cyan-600',
-  '明清': 'bg-blue-700',
-  '近代史': 'bg-purple-600',
-}
-
-const categoryEmojis = {
-  '战争': '⚔️',
-  '文化': '📜',
-  '科技': '🔬',
-  '政治': '🏛️',
-  '经济': '💰',
 }
 
 export default function TopicMode({ events, onEventClick }) {
@@ -147,10 +130,10 @@ export default function TopicMode({ events, onEventClick }) {
                   <span className="text-lg flex-shrink-0 mt-0.5">{categoryEmojis[event.category]}</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className={`w-2 h-2 rounded-full flex-shrink-0 ${dynastyColors[event.dynasty] || 'bg-gray-400'}`} />
+                      <span className={`w-2 h-2 rounded-full flex-shrink-0 ${getDynastyColors(event.dynasty).bg}`} />
                       <h4 className="font-bold text-gray-800 group-hover:text-amber-700 transition-colors">{event.title}</h4>
                       <span className="text-xs text-gray-400 font-mono flex-shrink-0">
-                        {event.year < 0 ? `前${Math.abs(event.year)}` : event.year}
+                        {formatYearShort(event.year)}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 mt-0.5 line-clamp-1">{event.description}</p>

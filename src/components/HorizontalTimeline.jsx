@@ -1,23 +1,6 @@
 import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-
-const dynastyColors = {
-  '先秦': { bg: 'bg-amber-600', text: 'text-amber-800', border: 'border-amber-400' },
-  '秦汉': { bg: 'bg-red-600', text: 'text-red-800', border: 'border-red-400' },
-  '三国两晋南北朝': { bg: 'bg-emerald-600', text: 'text-emerald-800', border: 'border-emerald-400' },
-  '隋唐': { bg: 'bg-yellow-500', text: 'text-yellow-800', border: 'border-yellow-400' },
-  '五代十国宋元': { bg: 'bg-cyan-600', text: 'text-cyan-800', border: 'border-cyan-400' },
-  '明清': { bg: 'bg-blue-700', text: 'text-blue-800', border: 'border-blue-400' },
-  '近代史': { bg: 'bg-purple-600', text: 'text-purple-800', border: 'border-purple-400' },
-}
-
-const categoryEmojis = {
-  '战争': '⚔️', '文化': '📜', '科技': '🔬', '政治': '🏛️', '经济': '💰',
-}
-
-function formatYear(year) {
-  return year < 0 ? `前${Math.abs(year)}` : `${year}`
-}
+import { dynastyOrder, getDynastyColors, categoryEmojis, formatYearShort } from '../constants'
 
 // 布局常量
 const LINE_Y = 200       // 主线 Y 坐标
@@ -25,7 +8,6 @@ const TOP_GAP = 20       // 上方卡片底部到主线的间距
 const BOTTOM_GAP = 20    // 下方卡片顶部到主线的间距
 
 export default function HorizontalTimeline({ events, onEventClick, dynastyRefs }) {
-  const dynastyOrder = ['先秦', '秦汉', '三国两晋南北朝', '隋唐', '五代十国宋元', '明清', '近代史']
   const scrollRef = useRef(null)
 
   const groupedEvents = events.reduce((acc, event) => {
@@ -64,7 +46,7 @@ export default function HorizontalTimeline({ events, onEventClick, dynastyRefs }
             {dynastyOrder.map((dynasty) => {
               const de = groupedEvents[dynasty]
               if (!de || de.length === 0) return null
-              const colors = dynastyColors[dynasty]
+              const colors = getDynastyColors(dynasty)
               const w = Math.max(de.length * 140, 180)
               return (
                 <div key={dynasty} id={`h-dynasty-${dynasty}`}
@@ -94,7 +76,7 @@ export default function HorizontalTimeline({ events, onEventClick, dynastyRefs }
               {dynastyOrder.map((dynasty) => {
                 const de = groupedEvents[dynasty]
                 if (!de || de.length === 0) return null
-                const colors = dynastyColors[dynasty]
+                const colors = getDynastyColors(dynasty)
                 const w = Math.max(de.length * 140, 180)
 
                 return (
@@ -147,7 +129,7 @@ export default function HorizontalTimeline({ events, onEventClick, dynastyRefs }
                             onClick={() => onEventClick(event)}
                           >
                             <div className={`p-3 rounded-xl border-l-[3px] ${colors.border} bg-white shadow-sm group-hover:shadow-lg group-hover:-translate-y-1 transition-all`}>
-                              <p className={`text-[10px] font-mono ${colors.text} font-bold`}>{formatYear(event.year)}</p>
+                              <p className={`text-[10px] font-mono ${colors.text} font-bold`}>{formatYearShort(event.year)}</p>
                               <p className="text-xs font-bold text-gray-800 mt-0.5 line-clamp-2 leading-tight">{event.title}</p>
                               <div className="flex items-center gap-1 mt-1.5">
                                 <span className="text-xs">{categoryEmojis[event.category]}</span>
